@@ -1,268 +1,294 @@
-import React from 'react';
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Snyk + AWS Q Developer Integration</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom Snyk color palette inspired by the screenshot */
+    :root {
+      --snyk-dark-blue: #1a1a2e;
+      --snyk-accent-blue: #00bcd4;
+      --snyk-purple: #8a2be2;
+      --snyk-light-pink: #ff69b4;
+      --snyk-text-light: #ffffff;
+      --snyk-text-dark: #e0e0e0;
+      --snyk-gradient-start: #1a1a2e;
+      --snyk-gradient-end: #2a0a5e;
+    }
 
-// Tailwind CSS is assumed to be available
-const App = () => {
+    body {
+      font-family: 'Inter', sans-serif; /* Using Inter for consistency */
+      background-color: var(--snyk-dark-blue);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
 
-  // Snyk color palette inspired by the provided screenshot
-  const colors = {
-    snykDarkBlue: '#1a1a2e', // Deep blue from the screenshot background
-    snykAccentBlue: '#00bcd4', // Vibrant light blue/cyan
-    snykPurple: '#8a2be2', // Vibrant purple
-    snykLightPink: '#ff69b4', // Brighter pink accent
-    snykTextLight: '#ffffff', // White text for dark backgrounds
-    snykTextDark: '#e0e0e0', // Slightly off-white for secondary text on dark
-    snykGradientStart: '#1a1a2e', // Darker end of the gradient
-    snykGradientEnd: '#2a0a5e', // Lighter purple end of the gradient
-  };
+    /* Gradient background for sections */
+    .gradient-bg-right {
+      background: linear-gradient(to right, var(--snyk-gradient-start), var(--snyk-gradient-end));
+    }
 
-  const benefits = [
-    {
-      role: 'Developers',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-code text-snykPurple">
-          <polyline points="16 18 22 12 16 6"/>
-          <polyline points="8 6 2 12 8 18"/>
+    .gradient-bg-left {
+      background: linear-gradient(to left, var(--snyk-gradient-end), var(--snyk-gradient-start));
+    }
+
+    /* Pattern overlay for hero section */
+    .hero-pattern-overlay {
+      background: radial-gradient(circle at 10% 20%, rgba(138, 43, 226, 0.2), transparent 50%),
+                  radial-gradient(circle at 90% 80%, rgba(0, 188, 212, 0.2), transparent 50%);
+      opacity: 0.5;
+    }
+
+    /* General card styling */
+    .card-dark {
+      background-color: var(--snyk-dark-blue);
+      border: 1px solid rgba(0, 188, 212, 0.1); /* snykAccentBlue with opacity */
+    }
+
+    .card-purple-border {
+      background-color: var(--snyk-dark-blue);
+      border: 1px solid rgba(138, 43, 226, 0.1); /* snykPurple with opacity */
+    }
+
+    /* Icon styling */
+    .icon-bg-accent {
+      background-color: rgba(0, 188, 212, 0.2); /* snykAccentBlue with opacity */
+    }
+
+    .icon-bg-purple {
+      background-color: rgba(138, 43, 226, 0.2); /* snykPurple with opacity */
+    }
+
+    /* Button styling */
+    .btn-primary {
+      background-color: var(--snyk-accent-blue);
+      color: var(--snyk-dark-blue);
+    }
+    .btn-primary:hover {
+      background-color: var(--snyk-light-pink);
+      color: var(--snyk-text-light);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header/Hero Section -->
+  <header class="relative py-16 text-white overflow-hidden gradient-bg-right">
+    <div class="absolute inset-0 z-0 hero-pattern-overlay"></div>
+    <div class="relative z-10 container mx-auto px-6 lg:px-8 text-center">
+      <div class="flex items-center justify-center space-x-6 mb-8">
+        <!-- Snyk Logo (simplified SVG) -->
+        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="text-white">
+          <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17zM10.5 7.5h3v7h-3v-7zm0 8.5h3v-2h-3v2z" fill="currentColor"/>
         </svg>
-      ),
-      description: "Code confidently with real-time, AI-powered security insights directly in your IDE and CI/CD. Snyk catches vulnerabilities early in your AI applications, open-source models, and cloud configurations, reducing rework and accelerating innovation with AWS Q Developer.",
-      keyPoints: [
-        "Real-time feedback on AI code & dependencies.",
-        "Automated security scans in your workflow.",
-        "Focus on building, not fixing later."
-      ]
-    },
-    {
-      role: 'AppSec Engineers',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-shield-check text-snykAccentBlue">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
-          <path d="m9 12 2 2 4-4"/>
-        </svg>
-      ),
-      description: "Gain comprehensive visibility and control over AI-specific risks across your development pipelines on AWS. Proactively identify and remediate vulnerabilities in AI models, data pipelines, and cloud infrastructure, ensuring your AI initiatives are secure from code to cloud.",
-      keyPoints: [
-        "Centralized visibility for AI security.",
-        "Automated policy enforcement for cloud AI.",
-        "Proactive risk management and reporting."
-      ]
-    },
-    {
-      role: 'CISOs',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-lock text-snykPurple">
-          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-        </svg>
-      ),
-      description: "Build trust in your AI applications with a robust security posture. The Snyk AI Trust Platform, integrated with AWS Q Developer, provides the assurance needed to innovate responsibly, manage compliance, and mitigate emerging AI-specific threats at scale.",
-      keyPoints: [
-        "Ensures AI compliance and governance.",
-        "Reduces organizational risk from AI vulnerabilities.",
-        "Fosters secure AI innovation with confidence."
-      ]
-    },
-  ];
-
-  const setupSteps = [
-    {
-      step: 1,
-      title: 'Prerequisites & Snyk Platform Setup',
-      description: 'Ensure your Snyk account is active and connected to your AWS environment. Grant Snyk the necessary read-only IAM permissions to scan relevant AWS services, including repositories, compute environments (like EC2, ECS, EKS), and any services used by AWS Q Developer for your AI workloads.',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-check-circle text-snykAccentBlue">
-          <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-          <polyline points="22 4 12 14.01 9 11.01"/>
-        </svg>
-      )
-    },
-    {
-      step: 2,
-      title: 'Define Snyk MCP Policies for AI',
-      description: 'Define your security policies as machine-controllable policies (MCP) within Snyk. These policies specify acceptable security posture for your AI applications, covering open-source components, custom code (including AI-generated), containers, and cloud configurations. Use Snyk CLI or API to manage these policies as code.',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-text text-snykLightPink">
-          <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
-          <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
-          <path d="M10 9H8"/>
-          <path d="M16 13H8"/>
-          <path d="M16 17H8"/>
-        </svg>
-      )
-    },
-    {
-      step: 3,
-      title: 'Integrate Snyk MCP into AWS Q Developer Workflows',
-      description: 'Embed Snyk CLI commands within your AWS Q Developer environments and associated build processes. Configure Snyk to evaluate AI-generated code, prompt modifications, and infrastructure against your defined MCP policies. This creates developer guardrails that provide immediate security feedback on agentic workflow outputs.',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-git-commit text-snykPurple">
-          <circle cx="12" cy="12" r="3"/>
-          <line x1="3" x2="9" y1="12" y2="12"/>
-          <line x1="15" x2="21" y1="12" y2="12"/>
-        </svg>
-      )
-    },
-    {
-      step: 4,
-      title: 'Automate Continuous Policy Enforcement in CI/CD',
-      description: 'Extend your CI/CD pipelines (e.g., AWS CodePipeline, Jenkins, GitLab CI) to include automated Snyk policy checks. Configure security gates to enforce MCP policies, blocking or flagging builds that violate defined security standards before deployment to production environments.',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-git-branch text-snykAccentBlue">
-          <line x1="6" x2="6" y1="3" y2="15"/>
-          <circle cx="18" cy="6" r="3"/>
-          <circle cx="6" cy="18" r="3"/>
-          <path d="M18 9v2c0 1.1-.9 2-2 2H6"/>
-        </svg>
-      )
-    },
-    {
-      step: 5,
-      title: 'Centralized Monitoring & AI Trust Reporting',
-      description: 'Access the Snyk dashboard for a comprehensive, real-time overview of your AI security posture. Monitor MCP compliance, track vulnerability remediation, and generate reports on the security of your AI applications, ensuring trust and accelerating secure innovation.',
-      icon: (
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-bar-chart-2 text-snykLightPink">
-          <line x1="18" x2="18" y1="20" y2="10"/>
-          <line x1="12" x2="12" y1="20" y2="4"/>
-          <line x1="6" x2="6" y1="20" y2="14"/>
-        </svg>
-      )
-    },
-  ];
-
-  return (
-    <div className="min-h-screen font-sans" style={{ backgroundColor: colors.snykDarkBlue }}>
-      {/* Header/Hero Section */}
-      <header className="relative py-16 text-white overflow-hidden" style={{ background: `linear-gradient(to right, ${colors.snykGradientStart}, ${colors.snykGradientEnd})` }}>
-        {/* Pattern overlay - using a simple radial gradient for effect as image is not directly usable */}
-        <div className="absolute inset-0 z-0" style={{
-          background: `radial-gradient(circle at 10% 20%, ${colors.snykPurple}20, transparent 50%), radial-gradient(circle at 90% 80%, ${colors.snykAccentBlue}20, transparent 50%)`,
-          opacity: 0.5,
-        }}></div>
-        <div className="relative z-10 container mx-auto px-6 lg:px-8 text-center">
-          <div className="flex items-center justify-center space-x-6 mb-8">
-            {/* Snyk Logo (simplified SVG) */}
-            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-white">
-              <path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm0 1.5a8.5 8.5 0 1 1 0 17 8.5 8.5 0 0 1 0-17zM10.5 7.5h3v7h-3v-7zm0 8.5h3v-2h-3v2z" fill="currentColor"/>
-            </svg>
-            <span className="text-5xl font-extrabold">+</span>
-            {/* AWS Logo (placeholder or simple text) */}
-            <div className="text-5xl font-bold text-white">AWS Q<span className="font-light">Dev</span></div>
-          </div>
-          <h1 className="text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">
-            Secure AI from Code to Cloud
-          </h1>
-          <p className="text-xl lg:text-2xl font-light max-w-3xl mx-auto mb-8" style={{ color: colors.snykTextDark }}>
-            **Snyk AI Trust Platform** + **AWS Q Developer**: Evolving DevSecOps for the AI Era. Build, deploy, and innovate with confidence.
-          </p>
-          <a
-            href="#call-to-action"
-            className="inline-block text-snykDarkBlue bg-snykAccentBlue hover:bg-snykLightPink hover:text-white transition-all duration-300 text-lg font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105"
-          >
-            Get Started with Secure AI
-          </a>
-        </div>
-      </header>
-
-      {/* Introduction */}
-      <section className="py-16 px-6 lg:px-8" style={{ backgroundColor: colors.snykDarkBlue }}>
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-4xl font-bold mb-6" style={{ color: colors.snykTextLight }}>
-            Why Snyk AI Trust Platform for AWS Q Developer?
-          </h2>
-          <p className="text-xl leading-relaxed mb-8" style={{ color: colors.snykTextDark }}>
-            As AI transforms how developers build and innovate, new security challenges emerge across the entire development lifecycle, from the very first line of code to deployment in the cloud. Traditional security approaches often fall short.
-          </p>
-          <p className="text-xl leading-relaxed" style={{ color: colors.snykTextDark }}>
-            The **Snyk AI Trust Platform**, integrated with **AWS Q Developer**, empowers your teams with **AI-native security** built into every stage. It's about maturing your DevSecOps program to be truly AI-ready, fostering collaboration, and ensuring you can leverage AI with unwavering confidence.
-          </p>
-        </div>
-      </section>
-
-      {/* Benefits Section */}
-      <section className="py-16 px-6 lg:px-8" style={{ background: `linear-gradient(to right, ${colors.snykGradientStart}, ${colors.snykGradientEnd})` }}>
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center" style={{ color: colors.snykTextLight }}>
-            Benefits for Your Whole Team
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {benefits.map((benefit, index) => (
-              <div
-                key={index}
-                className="rounded-xl shadow-lg p-6 flex flex-col items-start text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl"
-                style={{ backgroundColor: colors.snykDarkBlue, border: `1px solid ${colors.snykAccentBlue}10` }}
-              >
-                <div className="flex items-center mb-4">
-                  <div className="p-3 rounded-full mr-3" style={{ backgroundColor: colors.snykAccentBlue + '20' }}>
-                    {benefit.icon}
-                  </div>
-                  <h3 className="text-2xl font-bold" style={{ color: colors.snykTextLight }}>{benefit.role}</h3>
-                </div>
-                <p className="text-base mb-4 flex-grow" style={{ color: colors.snykTextDark }}>{benefit.description}</p>
-                <ul className="list-disc list-inside text-sm" style={{ color: colors.snykTextDark }}>
-                  {benefit.keyPoints.map((point, i) => (
-                    <li key={i}>{point}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Integration Setup Steps */}
-      <section className="py-16 px-6 lg:px-8" style={{ backgroundColor: colors.snykDarkBlue }}>
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-bold mb-12 text-center" style={{ color: colors.snykTextLight }}>
-            Seamless Integration: Get Started in 5 Steps
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {setupSteps.map((item, index) => (
-              <div
-                key={index}
-                className="rounded-xl p-6 shadow-md flex flex-col items-center text-center"
-                style={{ backgroundColor: colors.snykDarkBlue, border: `1px solid ${colors.snykPurple}10` }}
-              >
-                <div className="p-4 rounded-full mb-4" style={{ backgroundColor: colors.snykPurple + '20' }}>
-                  {item.icon}
-                </div>
-                <h3 className="text-2xl font-bold mb-3" style={{ color: colors.snykTextLight }}>
-                  Step {item.step}: {item.title}
-                </h3>
-                <p className="text-base" style={{ color: colors.snykTextDark }}>{item.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Call to Action */}
-      <section id="call-to-action" className="py-16 px-6 lg:px-8 text-center text-white" style={{ background: `linear-gradient(to left, ${colors.snykGradientEnd}, ${colors.snykGradientStart})` }}>
-        <div className="container mx-auto max-w-4xl">
-          <h2 className="text-4xl lg:text-5xl font-extrabold mb-6">
-            Ready to Build Trustworthy AI?
-          </h2>
-          <p className="text-xl lg:text-2xl font-light mb-8" style={{ color: colors.snykTextDark }}>
-            Secure your AI-powered applications from code to cloud with the Snyk AI Trust Platform and AWS Q Developer. Start evolving your DevSecOps today.
-          </p>
-          <a
-            href="https://snyk.io/contact-sales/" // Placeholder CTA link
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-block text-snykDarkBlue bg-snykAccentBlue hover:bg-snykLightPink hover:text-snykTextLight transition-all duration-300 text-lg font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105"
-          >
-            Contact Snyk Sales
-          </a>
-        </div>
-      </section>
-
-      {/* Footer */}
-      <footer className="py-8 text-center" style={{ backgroundColor: colors.snykDarkBlue, borderTop: `1px solid ${colors.snykAccentBlue}10` }}>
-        <p className="text-gray-400">&copy; {new Date().getFullYear()} Snyk. All rights reserved.</p>
-        <p className="text-sm">
-          <a href="https://snyk.io/news/snyk-announces-first-ai-trust-platform-to-revolutionize-secure-software-for-the-ai-era/" target="_blank" rel="noopener noreferrer" className="text-snykAccentBlue hover:underline">Learn more about Snyk AI Trust Platform</a>
-        </p>
-      </footer>
+        <span class="text-5xl font-extrabold">+</span>
+        <!-- AWS Logo (placeholder or simple text) -->
+        <div class="text-5xl font-bold text-white">AWS Q<span class="font-light">Dev</span></div>
+      </div>
+      <h1 class="text-5xl lg:text-6xl font-extrabold mb-4 leading-tight">
+        Secure AI from Code to Cloud
+      </h1>
+      <p class="text-xl lg:text-2xl font-light max-w-3xl mx-auto mb-8" style="color: var(--snyk-text-dark);">
+        <strong>Snyk AI Trust Platform</strong> + <strong>AWS Q Developer</strong>: Evolving DevSecOps for the AI Era. Build, deploy, and innovate with confidence.
+      </p>
+      <a
+        href="#call-to-action"
+        class="inline-block transition-all duration-300 text-lg font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 btn-primary"
+      >
+        Get Started with Secure AI
+      </a>
     </div>
-  );
-};
+  </header>
 
-export default App;
+  <!-- Introduction -->
+  <section class="py-16 px-6 lg:px-8" style="background-color: var(--snyk-dark-blue);">
+    <div class="container mx-auto max-w-4xl text-center">
+      <h2 class="text-4xl font-bold mb-6" style="color: var(--snyk-text-light);">
+        Why Snyk AI Trust Platform for AWS Q Developer?
+      </h2>
+      <p class="text-xl leading-relaxed mb-8" style="color: var(--snyk-text-dark);">
+        As AI transforms how developers build and innovate, new security challenges emerge across the entire development lifecycle, from the very first line of code to deployment in the cloud. Traditional security approaches often fall short.
+      </p>
+      <p class="text-xl leading-relaxed" style="color: var(--snyk-text-dark);">
+        The <strong>Snyk AI Trust Platform</strong>, integrated with <strong>AWS Q Developer</strong>, empowers your teams with <strong>AI-native security</strong> built into every stage. It's about maturing your DevSecOps program to be truly AI-ready, fostering collaboration, and ensuring you can leverage AI with unwavering confidence.
+      </p>
+    </div>
+  </section>
+
+  <!-- Benefits Section -->
+  <section class="py-16 px-6 lg:px-8 gradient-bg-right">
+    <div class="container mx-auto">
+      <h2 class="text-4xl font-bold mb-12 text-center" style="color: var(--snyk-text-light);">
+        Benefits for Your Whole Team
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="rounded-xl shadow-lg p-6 flex flex-col items-start text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl card-dark">
+          <div class="flex items-center mb-4">
+            <div class="p-3 rounded-full mr-3 icon-bg-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-code" style="color: var(--snyk-purple);">
+                <polyline points="16 18 22 12 16 6"/>
+                <polyline points="8 6 2 12 8 18"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold" style="color: var(--snyk-text-light);">Developers</h3>
+          </div>
+          <p class="text-base mb-4 flex-grow" style="color: var(--snyk-text-dark);">Code confidently with real-time, AI-powered security insights directly in your IDE and CI/CD. Snyk catches vulnerabilities early in your AI applications, open-source models, and cloud configurations, reducing rework and accelerating innovation with AWS Q Developer.</p>
+          <ul class="list-disc list-inside text-sm" style="color: var(--snyk-text-dark);">
+            <li>Real-time feedback on AI code & dependencies.</li>
+            <li>Automated security scans in your workflow.</li>
+            <li>Focus on building, not fixing later.</li>
+          </ul>
+        </div>
+        <div class="rounded-xl shadow-lg p-6 flex flex-col items-start text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl card-dark">
+          <div class="flex items-center mb-4">
+            <div class="p-3 rounded-full mr-3 icon-bg-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-shield-check" style="color: var(--snyk-accent-blue);">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold" style="color: var(--snyk-text-light);">AppSec Engineers</h3>
+          </div>
+          <p class="text-base mb-4 flex-grow" style="color: var(--snyk-text-dark);">Gain comprehensive visibility and control over AI-specific risks across your development pipelines on AWS. Proactively identify and remediate vulnerabilities in AI models, data pipelines, and cloud infrastructure, ensuring your AI initiatives are secure from code to cloud.</p>
+          <ul class="list-disc list-inside text-sm" style="color: var(--snyk-text-dark);">
+            <li>Centralized visibility for AI security.</li>
+            <li>Automated policy enforcement for cloud AI.</li>
+            <li>Proactive risk management and reporting.</li>
+          </ul>
+        </div>
+        <div class="rounded-xl shadow-lg p-6 flex flex-col items-start text-left transform transition-transform duration-300 hover:scale-105 hover:shadow-2xl card-dark">
+          <div class="flex items-center mb-4">
+            <div class="p-3 rounded-full mr-3 icon-bg-accent">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-lock" style="color: var(--snyk-purple);">
+                <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+            </div>
+            <h3 class="text-2xl font-bold" style="color: var(--snyk-text-light);">CISOs</h3>
+          </div>
+          <p class="text-base mb-4 flex-grow" style="color: var(--snyk-text-dark);">Build trust in your AI applications with a robust security posture. The Snyk AI Trust Platform, integrated with AWS Q Developer, provides the assurance needed to innovate responsibly, manage compliance, and mitigate emerging AI-specific threats at scale.</p>
+          <ul class="list-disc list-inside text-sm" style="color: var(--snyk-text-dark);">
+            <li>Ensures AI compliance and governance.</li>
+            <li>Reduces organizational risk from AI vulnerabilities.</li>
+            <li>Fosters secure AI innovation with confidence.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Integration Setup Steps -->
+  <section class="py-16 px-6 lg:px-8" style="background-color: var(--snyk-dark-blue);">
+    <div class="container mx-auto">
+      <h2 class="text-4xl font-bold mb-12 text-center" style="color: var(--snyk-text-light);">
+        Seamless Integration: Get Started in 5 Steps
+      </h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div class="rounded-xl p-6 shadow-md flex flex-col items-center text-center card-purple-border">
+          <div class="p-4 rounded-full mb-4 icon-bg-purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-check-circle" style="color: var(--snyk-accent-blue);">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3" style="color: var(--snyk-text-light);">
+            Step 1: Prerequisites & Snyk Platform Setup
+          </h3>
+          <p class="text-base" style="color: var(--snyk-text-dark);">Ensure your Snyk account is active and connected to your AWS environment. Grant Snyk the necessary read-only IAM permissions to scan relevant AWS services, including repositories, compute environments (like EC2, ECS, EKS), and any services used by AWS Q Developer for your AI workloads.</p>
+        </div>
+        <div class="rounded-xl p-6 shadow-md flex flex-col items-center text-center card-purple-border">
+          <div class="p-4 rounded-full mb-4 icon-bg-purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-text" style="color: var(--snyk-light-pink);">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+              <path d="M10 9H8"/>
+              <path d="M16 13H8"/>
+              <path d="M16 17H8"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3" style="color: var(--snyk-text-light);">
+            Step 2: Define Snyk MCP Policies for AI
+          </h3>
+          <p class="text-base" style="color: var(--snyk-text-dark);">Define your security policies as machine-controllable policies (MCP) within Snyk. These policies specify acceptable security posture for your AI applications, covering open-source components, custom code (including AI-generated), containers, and cloud configurations. Use Snyk CLI or API to manage these policies as code.</p>
+        </div>
+        <div class="rounded-xl p-6 shadow-md flex flex-col items-center text-center card-purple-border">
+          <div class="p-4 rounded-full mb-4 icon-bg-purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-commit" style="color: var(--snyk-purple);">
+              <circle cx="12" cy="12" r="3"/>
+              <line x1="3" x2="9" y1="12" y2="12"/>
+              <line x1="15" x2="21" y1="12" y2="12"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3" style="color: var(--snyk-text-light);">
+            Step 3: Integrate Snyk MCP into AWS Q Developer Workflows
+          </h3>
+          <p class="text-base" style="color: var(--snyk-text-dark);">Embed Snyk CLI commands within your AWS Q Developer environments and associated build processes. Configure Snyk to evaluate AI-generated code, prompt modifications, and infrastructure against your defined MCP policies. This creates developer guardrails that provide immediate security feedback on agentic workflow outputs.</p>
+        </div>
+        <div class="rounded-xl p-6 shadow-md flex flex-col items-center text-center card-purple-border">
+          <div class="p-4 rounded-full mb-4 icon-bg-purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-git-branch" style="color: var(--snyk-accent-blue);">
+              <line x1="6" x2="6" y1="3" y2="15"/>
+              <circle cx="18" cy="6" r="3"/>
+              <circle cx="6" cy="18" r="3"/>
+              <path d="M18 9v2c0 1.1-.9 2-2 2H6"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3" style="color: var(--snyk-text-light);">
+            Step 4: Automate Continuous Policy Enforcement in CI/CD
+          </h3>
+          <p class="text-base" style="color: var(--snyk-text-dark);">Extend your CI/CD pipelines (e.g., AWS CodePipeline, Jenkins, GitLab CI) to include automated Snyk policy checks. Configure security gates to enforce MCP policies, blocking or flagging builds that violate defined security standards before deployment to production environments.</p>
+        </div>
+        <div class="rounded-xl p-6 shadow-md flex flex-col items-center text-center card-purple-border">
+          <div class="p-4 rounded-full mb-4 icon-bg-purple">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-bar-chart-2" style="color: var(--snyk-light-pink);">
+              <line x1="18" x2="18" y1="20" y2="10"/>
+              <line x1="12" x2="12" y1="20" y2="4"/>
+              <line x1="6" x2="6" y1="20" y2="14"/>
+            </svg>
+          </div>
+          <h3 class="text-2xl font-bold mb-3" style="color: var(--snyk-text-light);">
+            Step 5: Centralized Monitoring & AI Trust Reporting
+          </h3>
+          <p class="text-base" style="color: var(--snyk-text-dark);">Access the Snyk dashboard for a comprehensive, real-time overview of your AI security posture. Monitor MCP compliance, track vulnerability remediation, and generate reports on the security of your AI applications, ensuring trust and accelerating secure innovation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section id="call-to-action" class="py-16 px-6 lg:px-8 text-center text-white gradient-bg-left">
+    <div class="container mx-auto max-w-4xl">
+      <h2 class="text-4xl lg:text-5xl font-extrabold mb-6">
+        Ready to Build Trustworthy AI?
+      </h2>
+      <p class="text-xl lg:text-2xl font-light mb-8" style="color: var(--snyk-text-dark);">
+        Secure your AI-powered applications from code to cloud with the Snyk AI Trust Platform and AWS Q Developer. Start evolving your DevSecOps today.
+      </p>
+      <a
+        href="https://snyk.io/contact-sales/"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block transition-all duration-300 text-lg font-bold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 btn-primary"
+      >
+        Contact Snyk Sales
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="py-8 text-center" style="background-color: var(--snyk-dark-blue); border-top: 1px solid rgba(0, 188, 212, 0.1);">
+    <p class="text-gray-400">&copy; <span id="current-year"></span> Snyk. All rights reserved.</p>
+    <p class="text-sm">
+      <a href="https://snyk.io/news/snyk-announces-first-ai-trust-platform-to-revolutionize-secure-software-for-the-ai-era/" target="_blank" rel="noopener noreferrer" class="text-snyk-accent-blue hover:underline">Learn more about Snyk AI Trust Platform</a>
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById('current-year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
